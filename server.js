@@ -6,31 +6,21 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware setup
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// API Routes
 app.use('/api/properties', propertyRoutes);
 
-// MongoDB connection
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(process.env.MONGO_URI);
         console.log("MongoDB Connected");
     } catch (err) {
-        console.error("MongoDB Connection Error:", err);
+        console.error("Database Connection Failed");
     }
 };
 
 connectDB();
 
-// Start server
-const PORT = 4000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
